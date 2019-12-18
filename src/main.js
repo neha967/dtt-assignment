@@ -6,6 +6,7 @@ import Routes from "./routes"
 import BootstrapVue from "bootstrap-vue"
 import "bootstrap/dist/css/bootstrap.css"
 import "bootstrap-vue/dist/bootstrap-vue.css"
+import XMLWriter from "xml-writer"
 
 Vue.use(BootstrapVue)
 
@@ -21,7 +22,17 @@ function getRoutesList(routes, pre) {
   return routes.reduce((array, route) => {
     const path = `${pre}${route.path}`;
 
-    if (route.path !== '*') {
+    if(route.path === "/detail/:code"){
+      let allCountries = localStorage.getItem("allCountries")
+      let parsedJSONCountries = JSON.parse(allCountries);
+
+      for(let i = 0; i < parsedJSONCountries.length; i++){
+        let dynamicDetailPath = `${pre}/detail/${parsedJSONCountries[i].alpha3Code}`
+        array.push(dynamicDetailPath);
+      }
+    }
+
+    if (route.path !== '*' && route.path !== "/detail/:code") {
       array.push(path);
     }
 
@@ -33,18 +44,24 @@ function getRoutesList(routes, pre) {
   }, []);
 }
 
-getRoutesList(router.options.routes, 'http://localhost:8080');
-
 function getRoutesXML() {
+  let xw;
+  xw = new XMLWriter;
+  xw.startDocument();
   const list = getRoutesList(router.options.routes, 'http://localhost:8080')
-    .map(route => `<url><loc>${route}</loc></url>`)
+    .map(route => {
+      xw.startElement('url')
+      xw.startElement('loc')
+      xw.text(route);
+      xw.endElement('loc')
+      xw.endElement('url')
+    })
     .join('\r\n');
-  return `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-    ${list}
-  </urlset>`;
+    xw.endDocument();
+    return xw.toString()
 }
 
-getRoutesXML();
+console.log(getRoutesXML());
 
 new Vue({
   el: '#app',

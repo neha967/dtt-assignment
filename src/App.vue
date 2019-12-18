@@ -1,5 +1,5 @@
 <template>
-  <div>  
+  <div>
     <app-navbar></app-navbar> 
     <router-view></router-view>
     <app-footer></app-footer>
@@ -11,12 +11,6 @@ import NavBar from "./components/NavBar.vue"
 import Footer from "./components/Footer"
 
 export default {
-  name: 'app',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
-    }
-  },
   components: {
     "app-navbar": NavBar,
     "app-footer": Footer
@@ -29,5 +23,4 @@ export default {
     font-size: 24px;
     margin: 0 auto;
   }
-
 </style>
