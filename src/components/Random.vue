@@ -43,6 +43,7 @@ img {
 div {
   margin-top: 100px;
   padding: 20px;
+  height: 83vh;
 }
 
 @media (min-width: 400px) and (max-width: 800px) {

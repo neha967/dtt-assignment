@@ -17,3 +17,9 @@
     </ul>
   </nav>
 </template>
+
+<style scoped>
+li:hover {
+  background-color: darkgrey;
+}
+</style>
